@@ -31,7 +31,7 @@ class NewVisitorTest(unittest.TestCase):
                 )
 
         #she types "Buy peacock feathers" into a text box
-        inputbox.send_keys('Buy peakcock feathers')
+        inputbox.send_keys('Buy peacock feathers')
 
         #when she hits enter, the page updates, and now the
         #page lists "1: Buy peacock feathers" as an item in the
@@ -40,7 +40,8 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-                any(row.text=='1: Buy peacock feathers' for row in rows)
+                any(row.text=='1: Buy peacock feathers' for row in rows),
+                'New to-do item did not appear in table'
                 )
 
         #there is still a text box inviting her to add another item
