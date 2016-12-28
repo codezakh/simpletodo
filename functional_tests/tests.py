@@ -40,11 +40,13 @@ class NewVisitorTest(LiveServerTestCase):
 
         #she types "Buy peacock feathers" into a text box
         inputbox.send_keys('Buy peacock feathers')
-        inputbox.send_keys(Keys.ENTER)
 
-        #when she hits enter, the page updates, and now the
-        #page lists "1: Buy peacock feathers" as an item in the
-        #to-do list table
+        # When she hits enter, she is taken to a new URL,
+        # and now the page lists "1: Buy peacock feathers" as an item
+        # in a to-do list table
+        inputbox.send_keys(Keys.ENTER)
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         #there is still a text box inviting her to add another item
@@ -59,10 +61,35 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
+        #Now a new user, Francis, visis the site.
 
-        #Edith wonders whether the site will remember her list. Then she
-        #sees that the site has generated a unique url for her -- there is
-        #some explanatory text to that effect.
+        #A new browser session is used to ensure no information of Edith
+        #is coming through from cookies, etc.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        #Francis visits the home page. There is no sign of Edith's list.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('Use peacock feathers to make a fly', page_text)
+
+        #Francis stars a new list by entering a new item.
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        #Francis gets his own unique url
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        #again, there is no trace of edith's list
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
+
+
         self.fail('Finish the test!')
 
 
