@@ -2,8 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 import time
+from django.test import LiveServerTestCase
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -22,7 +23,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #Edith has heard about an online to-do app. She goes 
         #to check out its homepage.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         #she notices the page title and header mention todo lists
         self.assertIn('To-Do', self.browser.title)
@@ -39,6 +40,7 @@ class NewVisitorTest(unittest.TestCase):
 
         #she types "Buy peacock feathers" into a text box
         inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
 
         #when she hits enter, the page updates, and now the
         #page lists "1: Buy peacock feathers" as an item in the
@@ -49,6 +51,9 @@ class NewVisitorTest(unittest.TestCase):
         #she enters "Use peacock feathers to make a fly".
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
+        inputbox.send_keys(Keys.ENTER)
+
+        self.browser.implicitly_wait(1)
 
         #the page updates again, and now shows both items on her list
         self.check_for_row_in_list_table('1: Buy peacock feathers')
@@ -61,6 +66,6 @@ class NewVisitorTest(unittest.TestCase):
         self.fail('Finish the test!')
 
 
-if __name__== '__main__':
-    unittest.main(warnings='ignore')
+#if __name__== '__main__':
+#    unittest.main(warnings='ignore')
 
