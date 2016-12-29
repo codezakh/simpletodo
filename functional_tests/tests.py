@@ -80,7 +80,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
 
-        self.browser.implicitly_wait(1)
+        self.browser.implicitly_wait(3)
 
         #Francis gets his own unique url
         francis_list_url = self.browser.current_url
@@ -93,9 +93,29 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Buy milk', page_text)
 
 
-        self.fail('Finish the test!')
+
+    def test_layout_and_styling(self):
+        #Edith goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024,768)
+
+        #she notices the input box is centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+                inputbox.location['x'] + inputbox.size['width'] / 2,
+                512,
+                delta=5)
+
+        #she starts a new list and sees that the input is
+        #centered there as well
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.browser.implicitly_wait(3)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+                inputbox.location['x'] + inputbox.size['width'] / 2,
+                512, 
+                delta=5)
 
 
-#if __name__== '__main__':
-#    unittest.main(warnings='ignore')
 
