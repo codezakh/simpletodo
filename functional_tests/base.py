@@ -2,9 +2,13 @@ import sys
 import time
 
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as condition
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 class FunctionalTest(StaticLiveServerTestCase):
+    table_rendered = (By.ID, 'id_list_table')
 
     @classmethod
     def setUpClass(cls):
@@ -30,6 +34,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_list_table')
+        #table = self.browser.find_element_by_id('id_list_table')
+        table = WebDriverWait(self.browser, 3).until(
+                condition.presence_of_element_located(self.table_rendered))
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])

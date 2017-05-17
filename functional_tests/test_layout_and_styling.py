@@ -21,7 +21,7 @@ class LayoutAndStylingTest(FunctionalTest):
         #centered there as well
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(3)
+        time.sleep(1)
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
                 inputbox.location['x'] + inputbox.size['width'] / 2,
