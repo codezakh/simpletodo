@@ -15,7 +15,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         for arg in sys.argv:
             if 'liveserver' in arg:
                 _, liveserverurl = arg.split('=')
-                cls.server_url = 'http://' + liveserverurl 
+                cls.server_url = 'http://' + liveserverurl
                 return
         super().setUpClass()
         cls.server_url = cls.live_server_url
@@ -27,7 +27,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
         self.browser.implicitly_wait(3)
 
     def tearDown(self):

@@ -8,7 +8,7 @@ from .base import FunctionalTest
 class NewVisitorTest(FunctionalTest):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        #Edith has heard about an online to-do app. She goes 
+        #Edith has heard about an online to-do app. She goes
         #to check out its homepage.
         self.browser.get(self.server_url)
 
@@ -53,7 +53,7 @@ class NewVisitorTest(FunctionalTest):
         #A new browser session is used to ensure no information of Edith
         #is coming through from cookies, etc.
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
         #Francis visits the home page. There is no sign of Edith's list.
         self.browser.get(self.server_url)
@@ -77,5 +77,3 @@ class NewVisitorTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
-
-
