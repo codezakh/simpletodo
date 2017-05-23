@@ -25,6 +25,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         if cls.server_url == cls.live_server_url:
             super().tearDownClass()
 
+    def get_item_input_box(self):
+        return self.browser.find_element_by_id('id_text')
+
 
     def setUp(self):
         self.browser = webdriver.Chrome()
