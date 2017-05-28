@@ -107,6 +107,7 @@ class ListViewTest(TestCase):
         self.assertIsInstance(response.context['form'], ItemForm)
         self.assertContains(response, 'name="text"')
 
+
 class NewListTest(TestCase):
 
     def test_saving_a_POST_request(self):
