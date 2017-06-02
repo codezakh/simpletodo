@@ -27,5 +27,5 @@ def new_list(request):
         Item.objects.create(text=request.POST['text'], list=list_)
     else:
         error = "You can't have an empty list item"
-        return render(request, 'home.html', {'error':error, 'form': form})
+        return render(request, 'home.html', {'form': form})
     return redirect(list_)

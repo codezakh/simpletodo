@@ -47,3 +47,17 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.RETURN)
         self.check_for_row_in_list_table('1: Buy milk')
         self.check_for_row_in_list_table('2: Make tea')
+
+    def test_cannot_add_duplicate_items(self):
+        # Throckmorton goes to the home page and starts a new list
+        self.browser.get(self.server_url)
+        self.get_item_input_box().send_keys('Buy sprongles\n')
+        self.check_for_row_in_list_table('1: Buy sprongles')
+
+        # It accidentally tries to enter a duplicate item
+        self.get_item_input_box().send_keys('Buy sprongles\n')
+
+        # It sees an error message
+        self.check_for_row_in_list_table('1: Buy sprongles')
+        error = self.browser.find_elements_by_css_selector('.has-error')
+        self.assertIn("You've already got this in your list", error)
