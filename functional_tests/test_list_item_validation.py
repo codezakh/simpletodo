@@ -10,6 +10,10 @@ from .base import FunctionalTest
 
 
 class ItemValidationTest(FunctionalTest):
+    def get_error_element(self):
+        error = self.browser.find_element_by_css_selector('.has-error')
+        return error
+
     def test_cannot_add_empty_list_items(self):
         flashed_error_message = (By.CSS_SELECTOR, '.has-error')
         table_rendered = (By.ID, 'id_list_table')
@@ -59,6 +63,20 @@ class ItemValidationTest(FunctionalTest):
 
         # It sees an error message
         self.check_for_row_in_list_table('1: Buy sprongles')
-        error = self.browser.find_elements_by_css_selector('.has-error')
+        error = self.get_error_element()
         self.assertIn("You've already got this in your list",
-                      [element.text for element in error])
+                    error.text)
+
+    def test_error_messages_are_cleared_on_input(self):
+        # Otto von Bismarck starts a new list with a validation error
+        self.browser.get(self.server_url)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        error = self.get_error_element()
+        self.assertTrue(error.is_displayed())
+
+        # He starts typing in the input box to clear the error
+        self.get_item_input_box().send_keys('meep')
+
+        # He sees the error message has disappeared!
+        error = self.get_error_element()
+        self.assertFalse(error.is_displayed())
