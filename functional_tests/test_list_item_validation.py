@@ -60,4 +60,5 @@ class ItemValidationTest(FunctionalTest):
         # It sees an error message
         self.check_for_row_in_list_table('1: Buy sprongles')
         error = self.browser.find_elements_by_css_selector('.has-error')
-        self.assertIn("You've already got this in your list", error)
+        self.assertIn("You've already got this in your list",
+                      [element.text for element in error])

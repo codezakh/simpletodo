@@ -39,3 +39,10 @@ class ExistingListItemForm(ItemForm):
         except ValidationError as e:
             e.error_dict = {'text': [DUPLICATE_ITEM_ERROR]}
             self._update_errors(e)
+
+    def save(self):
+        """
+        Override inherited save behavior from ItemForm to restore original
+        behavior from ModelForm.
+        """
+        return forms.models.ModelForm.save(self)
